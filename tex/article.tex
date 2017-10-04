@@ -9,7 +9,7 @@
 
   \maketitle
 
-  \section{Ejercicio [TODO elegir uno] }
+  \section{Ejercicio 7: Se realiza un experimento para estudiar la efectividad de un nuevo tipo de somnífero, para lo cual se administra el mismo a 6 pacientes, mientras que a otros 6  se les da un somnífero estándar y a 6 más un placebo, durante una semana. En la tabla 6.33 se recogen las medias del número de  horas de sueño en las 7 noches para los 18 pacientes. (a=placebo, b= estándar, c=nuevo)}
 
     \paragraph{}
     [TODO]
@@ -25,8 +25,9 @@
       \paragraph{}
       Lo primero que se ha hecho es realizar una representación gráfica para conocer mejor la relación entre las variables. Por tanto, se ha elegido representar los datos mediante un \emph{Box Plot} que de la variable \texttt{niveles} particionada en los subgrupos determinados por el tipo de \texttt{grupo}.
 
-      \begin{figure}
-        %\includegraphics{}
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{boxplot1}
         \caption{Box Plot de la variable \texttt{niveles} condicionada por la variable \texttt{grupo}}
         \label{fig:figura_1}
       \end{figure}
@@ -55,8 +56,10 @@
       Para la obtención de los estimadores puntuales así como los intervalos de confianza se han utilizado los \emph{procs} \texttt{MEANS} y \texttt{UNIVARIATE} obteniendo los siguientes resultados en cada uno de ellos:
 
 
-      \paragraph{}
-      [TABLAS de RESULTADOS]
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{EstimadoresMediasyIntervalos}
+      \end{figure}
 
       \paragraph{}
       Estos dos métodos ofrecen los mismos resultados, sin embargo lo que les diferencia es la cantidad de información que aportan cada uno de ellos. En el caso de \texttt{MEANS} la información es mucho más compacta y resumida, lo cual facilita su comprensión. Mientras que en el caso de \texttt{UNIVARIATE} se obtiene información mucho más extendida y ampliada, como los valores de la varianza e intervalos de confianza para los estimadores de la esperanza y la varianza. Para casos en que se requiere de un resumen sencillo del conjunto de datos como es en este caso, es más apropiado el uso del \emph{proc} \texttt{MEANS}
@@ -96,7 +99,22 @@
     \subsection{Verifica las hipótesis del modelo con ayuda de gráficos de residuos}
 
       \paragraph{}
-      [TODO]
+      Para la verificar la hipótesis del modelo se han realizado distintas pruebas, entre ellas se ha estudiado la hipótesis de igualdad de varianzas entre los distintos tratamientos. También se ha analizado la distribución de los residuos obtenidos, para comprobar que sigue una distribución normal.
+
+      \paragraph{}
+      En el caso de la hipótesis de igualdad de varianzas, esta se llevado a cabo a partir del test de \emph{Levene} para el cual se ha obtenido un $\text{p-valor} \approx 0.027$. Por tanto, a un nivel de confianza del $95\%$ tendríamos que rechazar la hipótesis de que las varianzas son iguales. Sin embargo dicha hipótesis se puede aceptar si se toma un nivel de confianza del $98\%$.
+
+      \paragraph{}
+      En cuanto a la hipótesis de normalidad de la distribución de residuos, se puede admitir que esta es cierta debido a los resultados obtenidos en los distintos tests de normalidad. Esta idea se refleja en el gráfico de normalidad de los residuos, el cual se muestra en la figura \ref{fig:figura_2}.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{Normalidadresiduos7}
+        \caption{Gráfico de normalidad de residuos}
+        \label{fig:figura_2}
+      \end{figure}
+
+
 
     \subsection{Suponiendo que los grupos de datos correspondieran a cinco medicamentos elegidos aleatoriamente entre todos los posibles en el mercado, ?`cómo cambiaría el modelo adecuado? ?`Podría afirmarse que existe variación significativa entre los efectos de los distintos medicamentos? Estima las componentes de la varianza bajo dicho supuesto}
 
