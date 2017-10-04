@@ -30,7 +30,7 @@ data peces;
 		50 49 20 20 18
 		65 47 59 23 30
 		72 30 64 38 22
-		46 602 61 31 26
+		46 62 61 31 26
 		38 62 28 27 31
 		29 60 47 16 11
 		70 19 29 27 15
@@ -45,6 +45,58 @@ run;
 proc print data=peces;
 run;
 
+DATA PECES_C;
+SET PECES;
+GRUPO='Control';
+NIVELES=CONTROL;
+RUN;
+
+DATA PECES_25;
+SET PECES;
+GRUPO='25mg';
+NIVELES=M25MG;
+RUN;
+
+DATA PECES_50;
+SET PECES;
+GRUPO='50mg';
+NIVELES=M50MG;
+RUN;
+
+DATA PECES_100;
+SET PECES;
+GRUPO='100mg';
+NIVELES=M100MG;
+RUN;
+
+DATA PECES_125;
+SET PECES;
+GRUPO='125mg';
+NIVELES=M125MG;
+RUN;
+
+PROC APPEND BASE=PECES_C DATA=PECES_25;
+RUN;
+
+
+PROC APPEND BASE=PECES_C DATA=PECES_50;
+RUN;
+
+
+PROC APPEND BASE=PECES_C DATA=PECES_100;
+RUN;
+
+
+PROC APPEND BASE=PECES_C DATA=PECES_125;
+RUN;
+
+DATA PECES_F;
+SET PECES_C;
+KEEP GRUPO NIVELES;
+RUN;
+
+PROC PRINT DATA=PECES_F;RUN;
+
 /**
  * 
  * a) Representa gráficamente los datos. ¿Te parece que el medicamento es 
@@ -53,6 +105,16 @@ run;
  * 
  */
 
+PROC BOXPLOT DATA=peces_f;
+PLOT NIVELES*GRUPO;
+RUN;
+
+PROC GLM;
+CLASS GRUPO;
+MODEL NIVELES=GRUPO/CLPARM;
+CONTRAST 'Eficacia medicamento' GRUPO 0.25 0.25 0.25 0.25 -1/E;
+ESTIMATE 'Eficacia medicamento' GRUPO 0.25 0.25 0.25 0.25 -1;
+RUN;
 
 /**
  * 
@@ -62,6 +124,15 @@ run;
  * 
  */
 
+PROC MEANS CLM;
+CLASS GRUPO;
+VAR NIVELES;
+RUN;
+
+PROC UNIVARIATE CIBASIC;
+CLASS GRUPO;
+VAR NIVELES;
+RUN;
 
 /**
  * 
@@ -71,6 +142,11 @@ run;
  * 
  */
 
+PROC ANOVA;
+CLASS GRUPO;
+MODEL NIVELES=GRUPO;
+MEANS GRUPO/LSD DUNCAN SNK TUKEY BON SCHEFFE LINES ALPHA=0.1;run;
+RUN;
 
 /**
  * 
@@ -78,6 +154,12 @@ run;
  * dosis con el grupo “Control “ y comenta el resultado.
  * 
  */
+
+PROC ANOVA;
+CLASS GRUPO;
+MODEL NIVELES=GRUPO;
+MEANS GRUPO/DUNNETT('Control');
+RUN;
 
 
 /**
@@ -88,12 +170,34 @@ run;
  * 
  */
 
+proc glm;
+class GRUPO;
+model NIVELES=GRUPO/clparm;* se obtiene I.C. para el contraste pedido;
+contrast 'dosis bajas contra dosis altas' GRUPO .5 .5 -.5 -.5 0/E;
+estimate 'dosis bajas contra dosis altas' GRUPO .5 .5 -.5 -.5 0;
+run;
+
 
 /**
  * 
  * f) Verifica las hipótesis del modelo con ayuda de gráficos de residuos.
  * 
  */
+
+proc anova;
+class grupo;
+model niveles=grupo;
+means grupo/hovtest ;
+run;
+
+proc glm;
+class grupo;
+model niveles=grupo;
+output out= resal p=pred r=res student=rst;
+proc print data=resal;run;
+
+proc univariate plot normal data=resal;
+var res;run;
 
 
 /**
