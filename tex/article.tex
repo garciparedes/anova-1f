@@ -161,7 +161,7 @@
           proc anova;
             class GRUPO;
             model NIVELES=GRUPO;
-            means GRUPO/lsd duncan snk tukey bon scheffe lines alpha=0.1;run;
+            means GRUPO/lsd duncan snk tukey bon scheffe lines alpha=0.1;
           run;
         \end{minted}
         \caption{}
@@ -252,7 +252,7 @@
       \end{figure}
 
       \paragraph{}
-      Para la verificar la hipótesis del modelo se han realizado distintas pruebas, entre ellas se ha estudiado la hipótesis de igualdad de varianzas entre los distintos tratamientos. También se ha analizado la distribución de los residuos obtenidos, para comprobar que sigue una distribución normal.
+      Para verificar la hipótesis del modelo se han realizado distintas pruebas, entre ellas se ha estudiado la hipótesis de igualdad de varianzas entre los distintos tratamientos. También se ha analizado la distribución de los residuos obtenidos, para comprobar que sigue una distribución normal.
 
       \paragraph{}
       En el caso de la hipótesis de igualdad de varianzas, esta se llevado a cabo a partir del test de \emph{Levene} para el cual se ha obtenido un $\text{p-valor} \approx 0.027$. Por tanto, a un nivel de confianza del $95\%$ tendríamos que rechazar la hipótesis de que las varianzas son iguales. Sin embargo dicha hipótesis se puede aceptar si se toma un nivel de confianza del $98\%$.
@@ -271,11 +271,31 @@
 
     \subsection{Suponiendo que los grupos de datos correspondieran a cinco medicamentos elegidos aleatoriamente entre todos los posibles en el mercado, ?`cómo cambiaría el modelo adecuado? ?`Podría afirmarse que existe variación significativa entre los efectos de los distintos medicamentos? Estima las componentes de la varianza bajo dicho supuesto}
 
+
+      \begin{figure}[h]
+        \centering
+        \begin{minted}{sas}
+          proc glm;
+            class grupo;
+            model niveles=grupo;
+            random grupo/test;
+          run;
+        \end{minted}
+        \caption{}
+        \label{code:sas_8}
+      \end{figure}
+
       \paragraph{}
-      [TODO]
+      En este caso, en lugar de plantear el problema como un análisis de la varianza (ANOVA) de un factor con $k$ tratamientos distintos, lo deberemos plantear como un análisis de la varianza desde el punto de vista de un factor aleatorio. De esta manera, el conjunto de pasos a realizar para llevar a cabo el test de hipótesis no varía. Sin embargo la interpretación es distinta, ya que ahora en lugar de estudiar si existen tratamientos diferentes entre si y sus diferencias, el problema se plantea como conocer si todos los niveles extraidos como muestra pertenecen a una misma población.
 
+      \paragraph{}
+      Al igual que se concluyó en anteriores apartados, en este caso también hay que rechazar la hipótesis nula, debido a que el $\text{p-valor}$ toma un valor extremadamente bajo $\text{p-valor}\approx 0$. Puesto que hemos rechazado la hipótesis nula, podemos estimar el valor de la varianza entre los niveles tal y como se indica a continuación:
 
-
+      \begin{align}
+        Var(Error) + 12 Var(GRUPO) &= 3093.23\\
+        Var(Error) &= 176 \\
+        &\implies Var(GRUPO) = \frac{3093.23 - 176}{12} = 243.1025
+      \end{align}
 
 
 \end{document}
