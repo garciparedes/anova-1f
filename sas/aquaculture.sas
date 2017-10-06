@@ -13,15 +13,15 @@
 
 /**
  * Enunciado:
- * 
- * Se quiere estudiar el efecto de distintas dosis de un medicamento para 
- * combatir a los parásitos de peces criados en acuicultura. Para ello, se 
+ *
+ * Se quiere estudiar el efecto de distintas dosis de un medicamento para
+ * combatir a los parásitos de peces criados en acuicultura. Para ello, se
  * tomaron 60 peces al azar, y se dividieron en 5 grupos de 12 individuos cada
- * uno. El primer grupo no fue medicado, pero a los restantes se les suministró 
- * el medicamento en dosis crecientes. Tras una semana de tratamiento, se 
- * contabilizaron los parásitos existentes en cada individuo, obteniendo los 
+ * uno. El primer grupo no fue medicado, pero a los restantes se les suministró
+ * el medicamento en dosis crecientes. Tras una semana de tratamiento, se
+ * contabilizaron los parásitos existentes en cada individuo, obteniendo los
  * resultados del conjunto de datos 'peces'.
- * 
+ *
  */
 
 data peces;
@@ -98,11 +98,11 @@ RUN;
 PROC PRINT DATA=PECES_F;RUN;
 
 /**
- * 
- * a) Representa gráficamente los datos. ¿Te parece que el medicamento es 
- * efectivo contra los parásitos? Realiza un contraste de hipótesis para 
+ *
+ * a) Representa gráficamente los datos. ¿Te parece que el medicamento es
+ * efectivo contra los parásitos? Realiza un contraste de hipótesis para
  * verificarlo
- * 
+ *
  */
 
 PROC BOXPLOT DATA=peces_f;
@@ -117,11 +117,11 @@ ESTIMATE 'Eficacia medicamento' GRUPO 0.25 0.25 0.25 0.25 -1;
 RUN;
 
 /**
- * 
+ *
  * b) Obtén estimadores puntuales e intervalos de confianza para las medias de
  * los tratamientos, utilizando dos métodos distintos, y explica las ventajas e
  * inconvenientes de cada uno de ellos.
- * 
+ *
  */
 
 PROC MEANS CLM;
@@ -135,11 +135,11 @@ VAR NIVELES;
 RUN;
 
 /**
- * 
- * c) Analiza las diferencias significativas entre pares de medias de los 5 
- * grupos utilizando diferentes métodos, comentando y comparando los 
+ *
+ * c) Analiza las diferencias significativas entre pares de medias de los 5
+ * grupos utilizando diferentes métodos, comentando y comparando los
  * resultados. ¿Cambian las conclusiones si utilizas alfa = 0.1?
- * 
+ *
  */
 
 PROC ANOVA;
@@ -149,10 +149,10 @@ MEANS GRUPO/LSD DUNCAN SNK TUKEY BON SCHEFFE LINES ALPHA=0.1;run;
 RUN;
 
 /**
- * 
- * d) Realiza el test de Dunnett para comparar los efectos de las distintas 
+ *
+ * d) Realiza el test de Dunnett para comparar los efectos de las distintas
  * dosis con el grupo “Control “ y comenta el resultado.
- * 
+ *
  */
 
 PROC ANOVA;
@@ -163,11 +163,11 @@ RUN;
 
 
 /**
- * 
+ *
  * e) Se desea comparar el efecto de las dosis bajas del medicamento, -25-50 mg-
  * con el de las dosis altas, -100-125 mg.- Construye un intervalo de confianza
  * para la diferencia entre ambos efectos e interpreta el resultado obtenido.
- * 
+ *
  */
 
 proc glm;
@@ -179,9 +179,9 @@ run;
 
 
 /**
- * 
+ *
  * f) Verifica las hipótesis del modelo con ayuda de gráficos de residuos.
- * 
+ *
  */
 
 proc anova;
@@ -201,12 +201,17 @@ var res;run;
 
 
 /**
- * 
- * g) Suponiendo que los grupos de datos correspondieran a cinco medicamentos 
- * elegidos aleatoriamente entre todos los posibles en el mercado, ¿cómo 
- * cambiaría el modelo adecuado? ¿Podría afirmarse que existe variación 
- * significativa entre los efectos de los distintos medicamentos? Estima las 
+ *
+ * g) Suponiendo que los grupos de datos correspondieran a cinco medicamentos
+ * elegidos aleatoriamente entre todos los posibles en el mercado, ¿cómo
+ * cambiaría el modelo adecuado? ¿Podría afirmarse que existe variación
+ * significativa entre los efectos de los distintos medicamentos? Estima las
  * componentes de la varianza bajo dicho supuesto.
- * 
+ *
  */
 
+ proc glm;
+ class grupo;
+ model niveles=grupo;
+ random grupo/test;
+ run;
