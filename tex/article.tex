@@ -46,8 +46,6 @@
     \begin{figure}[H]
       \centering
       \includegraphics[width=0.7\textwidth]{ej7_ANOVA.png}
-      \caption{Resultados del análisis de la varianza según la variable \texttt{tipo de somnífero}}
-      \label{fig:7_resanova}
     \end{figure}
     \paragraph{}
 
@@ -59,13 +57,11 @@
 
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.7\textwidth]{ej7_dunnett.png}
-      \caption{Resultados del test de dunnet de los niveles Estándar y Nuevo frente al control Placebo}
-      \label{fig:7_resdunnett}
+      \includegraphics[width=0.9\textwidth]{ej7_dunnett.png}
     \end{figure}
 
     \paragraph{}
-    Los resultados de este test nos permiten rechazar la hipótesis de que cualquiera de los somníferos no tienen ningún efecto, ya que hay diferencias significativas entre ambos y el placebo a un nivel de confianza del 95%.
+    Los resultados de este test nos permiten rechazar la hipótesis de que cualquiera de los somníferos no tienen ningún efecto, ya que hay diferencias significativas entre ambos y el placebo a un nivel de confianza del 95\%.
 
     \paragraph{}
     Sabiendo esto, realizamos un test de la T para comprobar si existen diferencias significativas entre las medias del somnífero estándar y del nuevo. Haremos esto mediante un contraste $L=0\mu{Placebo} + \mu_{Nuevo} - \mu_{Estándar}$. Si este contraste tiene valor 0, implica que las medias son iguales. Obtenemos además el estimador de $L$, que nos permite conocer, en caso de no ser 0, si L es positivo (el nuevo somnífero es mejor) o negativo (peor). clparm nos permite además obtener un intervalo de confianza para el estimador.
@@ -86,9 +82,7 @@
 
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.7\textwidth]{ej7_contraste.png}
-      \caption{Resultados del test de contraste comparando los dos tipos de somnífero}
-      \label{fig:7_rescontraste}
+      \includegraphics[width=0.9\textwidth]{ej7_contraste.png}
     \end{figure}
 
     \paragraph{}
@@ -149,6 +143,12 @@
       \paragraph{}
       Si se acepta entonces podemos asegurar que el tratamiento no tiene efecto. Se ha escogido este contraste de hipótesis puesto que lo que se pretende comprobar es si el efecto del medicamento (en promedio) es diferente de los resultados que se obtienen sin el uso del mismo. Por tanto, se ha planteado como la igualdad de la media del valor de control y el promedio de las medias de cada cantidad de dosis del medicamento.
 
+
+          \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.9\textwidth]{contraste.png}
+          \end{figure}
+
       \paragraph{}
       Dicho hipótesis se ha realizado con un nivel de confiaza del $95\%$, para la cual se ha obtenido un $\text{p-valor}\approx 0$. Por esta razón \textbf{tenemos que rechazar la hipótesis nula, lo que significa que el medicamento es efectivo}. Puesto que el estimador obtenido tiene signo negativo, es decir, que los distintos tratamientos disminuyen el nivel de parásitos con respecto del valor de control.
 
@@ -157,6 +157,11 @@
     \begin{figure}[h]
       \centering
       \begin{minted}{sas}
+        proc means;
+          class GRUPO;
+          var NIVELES;
+        run;
+
         proc means clm;
           class GRUPO;
           var NIVELES;
@@ -173,14 +178,38 @@
       \paragraph{}
       Para la obtención de los estimadores puntuales así como los intervalos de confianza se han utilizado los \emph{procs} \texttt{means} y \texttt{univariate} obteniendo los siguientes resultados en cada uno de ellos:
 
-
       \begin{figure}[H]
         \centering
         \includegraphics[width=0.7\textwidth]{EstimadoresMediasyIntervalos}
       \end{figure}
 
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{univariateC.png}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{univariate25.png}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{univariate50.png}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{univariate100.png}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{univariate125.png}
+      \end{figure}
+
       \paragraph{}
-      Estos dos métodos ofrecen los mismos resultados, sin embargo lo que les diferencia es la cantidad de información que aportan cada uno de ellos. En el caso de \texttt{means} la información es mucho más compacta y resumida, lo cual facilita su comprensión. Mientras que en el caso de \texttt{univariate} se obtiene información mucho más extendida y ampliada, como los valores de la varianza e intervalos de confianza para los estimadores de la esperanza y la varianza. Para casos en que se requiere de un resumen sencillo del conjunto de datos como es en este caso, es más apropiado el uso del \emph{proc} \texttt{means}
+      Estos dos métodos ofrecen los mismos resultados, sin embargo lo que les diferencia es la cantidad de información que aportan cada uno de ellos. En el caso de \texttt{means} la información es mucho más compacta y resumida, lo cual facilita su comprensión, sin embargo este método no da los intervalos de confianza sin la opción \texttt{CLM}. Mientras que en el caso de \texttt{univariate} se obtiene información mucho más extendida y ampliada, como los valores de la varianza e intervalos de confianza para los estimadores de la esperanza y la varianza. Para casos en que se requiere de un resumen sencillo del conjunto de datos como es en este caso, es más apropiado el uso del \emph{proc} \texttt{means}
 
     \subsection{Analiza las diferencias significativas entre pares de medias de los 5 grupos utilizando diferentes métodos, comentando y comparando los resultados. ?`Cambian las conclusiones si utilizas $\alpha = 0.1$?}
 
@@ -199,9 +228,66 @@
       \paragraph{}
       Para la realización de los distintos tests se han utilizando los siguientes métodos: \emph{Método de la T}, \emph{Duncan}, \emph{Newman–Keuls}, \emph{Tukey}, \emph{Bonferroni} y \emph{Schefeé}. Estos se dividen en dos grupos, los que aseguran los resultados para experimentos múltiples con una confianza global de $1-\alpha$(\emph{Newman–Keuls}, \emph{Tukey}, \emph{Bonferroni} y \emph{Schefeé}) y los que no aseguran dicho nivel de confianza (\emph{Método de la T}, \emph{Duncan}).
 
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{tTest5.png}
+      \end{figure}
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{duncan5.png}
+      \end{figure}
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{student5.png}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{tukey5.png}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{bonferroni5.png}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{scheffe5.png}
+      \end{figure}
+
       \paragraph{}
       Se ha probado con un valor $\alpha = 0.05$, para el cual se han obtenido los mismos resultados en todos los tests: Existen dos grupos de medias, el formado por \texttt{Control}, \texttt{25mg} y \texttt{50mg}, y el siguiente constituido por los tratamientos de \texttt{100mg} y \texttt{125mg} tal y como se podía intuir en el gráfico de la figura \label{fig:figura_1}.
 
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{Ttest1.png}
+      \end{figure}
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{duncan1.png}
+      \end{figure}
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{student1.png}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{tukey1.png}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{bonferroni1.png}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{scheffe1.png}
+      \end{figure}
+
+      \paragraph{}
       Después se ha realizado el mismo conjunto de tests con $\alpha = 0.1$ obteniendo los mismos resultados que para el caso anterior en los tests que aseguran un nivel de confianza global $1-\alpha$, mientras que en el resto (\emph{Método de la T}, \emph{Duncan}), estos indican que la media del grupo \texttt{Control} es diferente del grupo formado por los tratamientos \texttt{25mg} y \texttt{50mg}, por lo que afirman la existencia de 3 grupos de medias diferentes.
 
     \subsection{Realiza el test de Dunnett para comparar los efectos de las distintas dosis con el grupo \texttt{control} y comenta el resultado.}
@@ -216,6 +302,11 @@
           run;
         \end{minted}
         \label{code:sas_6}
+      \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{dunnett.png}
       \end{figure}
 
       \paragraph{}
@@ -244,6 +335,11 @@
         H_0:& \quad \frac{\mu_{25mg} + \mu_{50mg}}{2} = \frac{\mu_{100mg} +\mu_{125mg}}{2} \\
         H_1:& \quad \frac{\mu_{25mg} + \mu_{50mg}}{2} \neq \frac{\mu_{100mg} +\mu_{125mg}}{2}
       \end{align*}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{contraste2.png}
+      \end{figure}
 
       \paragraph{}
       Se ha realizado dicho contraste con un nivel de confianza $1-\alpha$ con $\alpha = 0.05 $, para el cual se obtiene un $\text{p-valor}\approx 0$ por lo que se debe rechazar la hipótesis nula, es decir, no existe igualdad de medias entre los resultados obtenidos con dosis bajas y dosis altas.
@@ -279,19 +375,22 @@
       \paragraph{}
       Para verificar la hipótesis del modelo se han realizado distintas pruebas, entre ellas se ha estudiado la hipótesis de igualdad de varianzas entre los distintos tratamientos. También se ha analizado la distribución de los residuos obtenidos, para comprobar que sigue una distribución normal.
 
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{levene.png}
+      \end{figure}
+
       \paragraph{}
       En el caso de la hipótesis de igualdad de varianzas, esta se llevado a cabo a partir del test de \emph{Levene} para el cual se ha obtenido un $\text{p-valor} \approx 0.027$. Por tanto, a un nivel de confianza del $95\%$ tendríamos que rechazar la hipótesis de que las varianzas son iguales. Sin embargo dicha hipótesis se puede aceptar si se toma un nivel de confianza del $98\%$.
 
-      \paragraph{}
-      En cuanto a la hipótesis de normalidad de la distribución de residuos, se puede admitir que esta es cierta debido a los resultados obtenidos en los distintos tests de normalidad. Esta idea se refleja en el gráfico de normalidad de los residuos, el cual se muestra en la figura \ref{fig:figura_2}.
-
       \begin{figure}[H]
         \centering
-        \includegraphics[width=0.7\textwidth]{Normalidadresiduos7}
-        \caption{Gráfico de normalidad de residuos}
-        \label{fig:figura_2}
+        \includegraphics[width=0.7\textwidth]{normalidad2.png}
+        \includegraphics[width=0.7\textwidth]{normalidad1.png}
       \end{figure}
 
+      \paragraph{}
+      En cuanto a la hipótesis de normalidad de la distribución de residuos, se puede admitir que esta es cierta debido a los resultados obtenidos en los distintos tests de normalidad. Esta idea se refleja en el gráfico de normalidad de los residuos.
 
 
     \subsection{Suponiendo que los grupos de datos correspondieran a cinco medicamentos elegidos aleatoriamente entre todos los posibles en el mercado, ?`cómo cambiaría el modelo adecuado? ?`Podría afirmarse que existe variación significativa entre los efectos de los distintos medicamentos? Estima las componentes de la varianza bajo dicho supuesto}
@@ -316,6 +415,11 @@
         H_0:&\quad \sigma_\tau = 0 \\
         H_1:&\quad \sigma_\tau > 0
       \end{align*}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{random.png}
+      \end{figure}
 
       \paragraph{}
       Al igual que se concluyó en anteriores apartados, en este caso también hay que rechazar la hipótesis nula, debido a que el $\text{p-valor}$ toma un valor extremadamente bajo $\text{p-valor}\approx 0$. Puesto que hemos rechazado la hipótesis nula, podemos estimar el valor de la varianza entre los niveles tal y como se indica a continuación:
