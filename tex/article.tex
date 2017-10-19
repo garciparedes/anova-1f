@@ -15,11 +15,21 @@
     El enunciado del ejercicio es el siguiente: \say{Se realiza un experimento para estudiar la efectividad de un nuevo tipo de somnífero, para lo cual se administra el mismo a 6 pacientes, mientras que a otros 6  se les da un somnífero estándar y a 6 más un placebo, durante una semana. En la tabla 6.33 se recogen las medias del número de  horas de sueño en las 7 noches para los 18 pacientes. (a=placebo, b= estándar, c=nuevo)}
 
     \paragraph{}
-    Representamos los datos con un boxplot para observar su distribución de manera gráfica. Podemos ver que la distribución de Nuevo y Estandar parece similar, con Placebo teniendo horas de sueño por debajo de las otras dos.
+    Representamos los datos con un boxplot para observar su distribución de manera gráfica.
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.7\textwidth]{ej7_boxplot.png}
+      \caption{Box Plot de la variable \texttt{horas de sueño} condicionada por la variable \texttt{tipo de somnífero}}
+      \label{fig:7_figura_1}
+    \end{figure}
+    \paragraph{}
+
+    \paragraph{}
+     Podemos ver que la distribución de Nuevo y Estandar parece similar, con Placebo teniendo horas de sueño por debajo de las otras dos.
 
     \paragraph{}
     Respecto a un análisis de las medias, obtendremos la comparación de ambos tipos de somnífero contra el control que ofrece el Placebo.
-
 
     \begin{figure}[h]
 			\centering
@@ -33,11 +43,26 @@
 			\label{code:sas_1}
 		\end{figure}
 
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.7\textwidth]{ej7_ANOVA.png}
+      \caption{Resultados del análisis de la varianza según la variable \texttt{tipo de somnífero}}
+      \label{fig:7_resanova}
+    \end{figure}
+    \paragraph{}
+
     \paragraph{}
     proc anova nos proporciona de paso con el resultado del test de la hipótesis nula de que las medias de los tres grupos es igual, con un valor Pr > F 0.0003 podemos descartar esta hipótesis.
 
     \paragraph{}
     El test de dunnett ofrece intervalos de confianza para las diferencias de medias $\mu_{Placebo} - \mu_{i}$ siendo $i$ Estándar y Nuevo.
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.7\textwidth]{ej7_dunnett.png}
+      \caption{Resultados del test de dunnet de los niveles Estándar y Nuevo frente al control Placebo}
+      \label{fig:7_resdunnett}
+    \end{figure}
 
     \paragraph{}
     Los resultados de este test nos permiten rechazar la hipótesis de que cualquiera de los somníferos no tienen ningún efecto, ya que hay diferencias significativas entre ambos y el placebo a un nivel de confianza del 95%.
@@ -56,6 +81,14 @@
         run;
       \end{minted}
       \label{code:sas_2}
+    \end{figure}
+
+
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.7\textwidth]{ej7_contraste.png}
+      \caption{Resultados del test de contraste comparando los dos tipos de somnífero}
+      \label{fig:7_rescontraste}
     \end{figure}
 
     \paragraph{}
